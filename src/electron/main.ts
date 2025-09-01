@@ -2,6 +2,7 @@ import { app, BrowserWindow } from "electron";
 import path from "path";
 
 import { isDev } from "./util.js";
+import { pollResources } from "./resourceManager.js";
 
 // When app is ready, run arrow function
 app.on("ready", () => {
@@ -15,4 +16,6 @@ app.on("ready", () => {
         // path helps configure Windows' \
         mainWindow.loadFile(path.join(app.getAppPath() + "/dist-react/index.html"));
     }
+
+    pollResources();
 })
