@@ -1,6 +1,8 @@
 import {app, BrowserWindow} from "electron";
 import path from "path";
 
+type test = string;
+
 // When app is ready, run arrow function
 app.on("ready", () => {
     // Create new instance of window
