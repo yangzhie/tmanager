@@ -2,14 +2,32 @@ import os_utils from "os-utils";
 import si from "systeminformation";
 import fs from "fs";
 import os from "os";
+import { BrowserWindow } from "electron";
 
 const POLLING_INTERVAL = 500;
 
-export function pollResources() {
+export function pollResources(mainWindow: BrowserWindow) { // Which window recieves data
     setInterval(async () => { 
         const cpuUsage = await getCpuUsage();
         const ramUsage = getRamUsage();
         const storageData = getStorageData();
+
+        const gpuStats = await getGPUStats();
+        const gpu = gpuStats.gpu;
+        const gpuVRAM = gpuStats.gpuVRAM
+        const displayModel = gpuStats.displayModel;
+        const refreshRate = gpuStats.refreshRate;
+
+        // What is sent to UI
+        mainWindow.webContents.send("statistics", {
+            cpuUsage,
+            ramUsage,
+            storageData,
+            gpu,
+            gpuVRAM,
+            displayModel,
+            refreshRate
+        });
     }, POLLING_INTERVAL);
 }
 
