@@ -3,11 +3,17 @@ import path from "path";
 
 import { isDev } from "./util.js";
 import { pollResources } from "./resourceManager.js";
+import { getPreloadPath } from "./pathResolver.js";
 
 // When app is ready, run arrow function
 app.on("ready", () => {
     // Create new instance of window
-    const mainWindow = new BrowserWindow({});
+    const mainWindow = new BrowserWindow({
+        title: "Test",
+        webPreferences: {
+            preload: getPreloadPath() // Run script before opening window
+        }
+    });
 
     if (isDev()) {
         mainWindow.loadURL('http://localhost:9999/')
