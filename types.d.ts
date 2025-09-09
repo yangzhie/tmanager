@@ -31,11 +31,13 @@ type GPU = {
     gpuVRAM: number,
     displayModel: string,
     refreshRate: number
-}
+};
+
+type Unsubscribe = () => void;
 
 interface Window {
     electron: {
-        subStatistics: (callback: (statistics: Statistics) => void) => void;
+        subStatistics: (callback: (statistics: Statistics) => void) => Unsubscribe;
         getStaticData: () => Promise<StaticData>;
     };
 };

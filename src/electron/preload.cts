@@ -12,9 +12,9 @@ electron.contextBridge.exposeInMainWorld("electron", {
     // Event subscription IPC pattern
     // Renderer registers a listener, Main keeps pushing updates whenever it has new data
     subStatistics: (callback) => {
-        ipcOn("statistics", (data) => {
+        ipcOn("statistics", (data) => 
             callback(data)
-        });
+        );
     },
     
     // Req-res IPC pattern (invoke / ipcMain.handle)
@@ -35,5 +35,12 @@ function ipcOn<Key extends keyof EventPayloadMapping>(
     key: Key,
     callback: (payload: EventPayloadMapping[Key]) => void
 ) {
-    electron.ipcRenderer.on(key, (_, payload) => callback(payload));
+    // Event + payload sent from main
+    // cb forwards payload to callback
+    const cb = (_: Electron.IpcRendererEvent, payload: any) => callback(payload)
+    // Registers the listener so whenever main calls webContents.send(key, payload), cb runs
+    electron.ipcRenderer.on(key, cb);
+    // Function itself returns another function
+    // Returned function removes the listener just added
+    return () => electron.ipcRenderer.off(key, cb);
 };
