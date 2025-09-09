@@ -11,13 +11,29 @@ electron.contextBridge.exposeInMainWorld("electron", {
 
     // Event subscription IPC pattern
     // Renderer registers a listener, Main keeps pushing updates whenever it has new data
-    subStatistics: (callback: (statistics: any) => void) => {
-        electron.ipcRenderer.on("statistics", (_, data) => {
+    subStatistics: (callback) => {
+        ipcOn("statistics", (data) => {
             callback(data)
         });
     },
     
     // Req-res IPC pattern (invoke / ipcMain.handle)
     // Renderer asks once -> Main replies once -> Done
-    getStaticData: () => electron.ipcRenderer.invoke("getStaticData")
-});
+    getStaticData: () => ipcInvoke("getStaticData")
+} satisfies Window["electron"]); // satisfies tell TS what to expect, different to 'as'
+
+// Frontend functions cannot reside in utils.ts
+
+// Key is constrained to "statistics" | "getStaticData"
+function ipcInvoke<Key extends keyof EventPayloadMapping>(
+    key: Key
+): Promise<EventPayloadMapping[Key]> {
+    return electron.ipcRenderer.invoke(key);
+};
+
+function ipcOn<Key extends keyof EventPayloadMapping>(
+    key: Key,
+    callback: (payload: EventPayloadMapping[Key]) => void
+) {
+    electron.ipcRenderer.on(key, (_, payload) => callback(payload));
+};

@@ -3,6 +3,7 @@ import si from "systeminformation";
 import fs from "fs";
 import os from "os";
 import { BrowserWindow } from "electron";
+import { ipcWebContentsSend } from "./util.js";
 
 const POLLING_INTERVAL = 500;
 
@@ -19,7 +20,7 @@ export function pollResources(mainWindow: BrowserWindow) { // Which window recie
         const refreshRate = gpuStats.refreshRate;
 
         // What is sent to UI
-        mainWindow.webContents.send("statistics", {
+        ipcWebContentsSend("statistics", mainWindow.webContents, {
             cpuUsage,
             ramUsage,
             storageData,
@@ -29,7 +30,7 @@ export function pollResources(mainWindow: BrowserWindow) { // Which window recie
             refreshRate
         });
     }, POLLING_INTERVAL);
-}
+};
 
 export async function getStaticData() {
     const totalStorage = getStorageData().total;
@@ -42,10 +43,10 @@ export async function getStaticData() {
         cpu,
         uptime,
         totalMemory,
-    }
-}
+    };
+};
 
-export async function getGPUStats() {
+export async function getGPUStats(): Promise<GPU> {
     const { controllers, displays } = await si.graphics();
     const { vendor: gpuVendor, model: gpuModel, vram: gpuVRAM } = controllers[0];
     const { model: displayModel, currentRefreshRate: refreshRate } = displays[0]; 
@@ -57,21 +58,21 @@ export async function getGPUStats() {
         gpuVRAM,
         displayModel,
         refreshRate
-    }
-}
+    };
+};
 
-function getCpuUsage() {
+function getCpuUsage(): Promise<number> {
     return new Promise((resolve) => {
         os_utils.cpuUsage(resolve);
-    })
-}
+    });
+};
 
 function getRamUsage() {
     // The amount of memory that is free (as %) out of the rest
     return 1 - os_utils.freememPercentage();
-}
+};
 
-function getStorageData() {
+function getStorageData(): StorageData {
     // Stats about specific region in file system
     // If on Win, test for C drive, else Linux/Mac
     const stats = fs.statfsSync(process.platform === "win32" ? "C://" : "/");
@@ -83,5 +84,5 @@ function getStorageData() {
     return {
         total: Math.floor(total / 1000000000), // Convert to GB
         usage: 1 - free / total
-    }
-}
+    };
+};

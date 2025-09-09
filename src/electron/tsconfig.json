@@ -6,6 +6,7 @@
         "target": "ESNext",              // Generate ESM Syntax (import/export instead of require)
         "module": "NodeNext",            // Remove all types
         "outDir": "../../dist-electron", // Output directory
-        "skipLibCheck": true             // Still build if not adherent
+        "skipLibCheck": true,            // Still build if not adherent
+        "types": ["../../types"],      // Global types
     }
 }
