@@ -5,6 +5,7 @@ import { ipcMainHandle, isDev } from "./util.js";
 import { getStaticData, pollResources } from "./resourceManager.js";
 import { getAssetPath, getPreloadPath } from "./pathResolver.js";
 import { createTray } from "./tray.js";
+import { createMenu } from "./menu.js";
 
 // When app is ready, run arrow function
 app.on("ready", () => {
@@ -39,6 +40,7 @@ app.on("ready", () => {
 
     createTray(mainWindow);
     handleClose(mainWindow);
+    createMenu(mainWindow);
 });
 
 function handleClose(mainWindow: BrowserWindow) {
