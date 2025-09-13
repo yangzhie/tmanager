@@ -16,6 +16,12 @@ electron.contextBridge.exposeInMainWorld("electron", {
             callback(data)
         );
     },
+
+    subChangeView: (callback) => {
+        ipcOn("changeView", (data) => 
+            callback(data)
+        );
+    },
     
     // Req-res IPC pattern (invoke / ipcMain.handle)
     // Renderer asks once -> Main replies once -> Done
