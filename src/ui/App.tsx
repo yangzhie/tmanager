@@ -1,15 +1,20 @@
-import { useEffect } from 'react'
-import './App.css'
+import { useMemo } from 'react'
+import { useStatistics } from './useStatistics'
+import { Chart } from './Chart';
 
 function App() {
-  useEffect(() => {
-    const unsubscribe = window.electron.subStatistics((stats) => console.log(stats));
-    return unsubscribe;
-  }, []);
+  const statistics = useStatistics(10);
+
+  const cpuUsage = useMemo(
+    () => statistics.map((stat) => stat.cpuUsage), [statistics]
+  );
 
   return (
     <>
-
+      <div style={{height: 120}}>
+        <Chart data={cpuUsage} maxDataPoints={10}/>
+      </div>
+      statisticsstatisticsstatisticsstatisticsstatisticsstatisticsstatistics
     </>
   )
 }
