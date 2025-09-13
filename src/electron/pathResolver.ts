@@ -11,3 +11,11 @@ export function getPreloadPath() {
 
     return preloadPath;
 }
+
+export function getAssetPath() {
+    const assetPath = path.join(
+        app.getAppPath(), isDev() ? "." : "..", "/src/ui/assets"
+    );
+
+    return assetPath;
+};

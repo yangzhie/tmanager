@@ -1,9 +1,9 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, Tray } from "electron";
 import path from "path";
 
 import { ipcMainHandle, isDev } from "./util.js";
 import { getStaticData, pollResources } from "./resourceManager.js";
-import { getPreloadPath } from "./pathResolver.js";
+import { getAssetPath, getPreloadPath } from "./pathResolver.js";
 
 // When app is ready, run arrow function
 app.on("ready", () => {
@@ -35,4 +35,6 @@ app.on("ready", () => {
     ipcMainHandle("getStaticData", () => {
         return getStaticData();
     });
+
+    new Tray(path.join(getAssetPath(), "paper-tray.png"));
 });
