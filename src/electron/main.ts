@@ -4,6 +4,7 @@ import path from "path";
 import { ipcMainHandle, isDev } from "./util.js";
 import { getStaticData, pollResources } from "./resourceManager.js";
 import { getAssetPath, getPreloadPath } from "./pathResolver.js";
+import { createTray } from "./tray.js";
 
 // When app is ready, run arrow function
 app.on("ready", () => {
@@ -36,5 +37,35 @@ app.on("ready", () => {
         return getStaticData();
     });
 
-    new Tray(path.join(getAssetPath(), "paper-tray.png"));
+    createTray(mainWindow);
+    handleClose(mainWindow);
 });
+
+function handleClose(mainWindow: BrowserWindow) {
+    let closed = false;
+
+    // When app is closed, prevent default behaviour
+    mainWindow.on("close", (event) => {
+        if(closed) {
+            return;
+        }
+
+        event.preventDefault();
+
+        // Hides for Win/Lin
+        mainWindow.hide();
+
+        // If dock property exists (for Mac)
+        if(app.dock) {
+            app.dock.hide();
+        }
+    });
+
+    app.on("before-quit", () => {
+        closed = true;
+    });
+
+    mainWindow.on("show", () => {
+        closed = false;
+    });
+}
