@@ -20,3 +20,12 @@ export function ipcWebContentsSend<Key extends keyof EventPayloadMapping>(
 ) {
     webContents.send(key, payload);
 };
+
+export function ipcMainOn<Key extends keyof EventPayloadMapping>(
+    key: Key, 
+    handler: () => (payload: EventPayloadMapping[Key]) => void
+) {
+    ipcMain.on(key, (_, payload) => {
+        return handler(payload);
+    });
+};

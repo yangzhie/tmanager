@@ -1,0 +1,32 @@
+header {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    text-align: right;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    background-color: #181818;
+    -webkit-app-region: drag; /* Enable dragging of app from header */
+}
+
+header button {
+    all: unset;
+    border-radius: 50%;
+    width: 1rem;
+    height: 1rem;
+    margin: 0.25rem;
+    -webkit-app-region: no-drag; /* Disable dragging from buttons */
+}
+
+#close {
+    background-color: red;
+}
+
+#minimize {
+    background-color: yellow;
+}
+
+#maximize {
+    background-color: lime;
+}

@@ -25,7 +25,9 @@ electron.contextBridge.exposeInMainWorld("electron", {
     
     // Req-res IPC pattern (invoke / ipcMain.handle)
     // Renderer asks once -> Main replies once -> Done
-    getStaticData: () => ipcInvoke("getStaticData")
+    getStaticData: () => ipcInvoke("getStaticData"),
+
+    sendFrameAction: (payload) => ipcSend("sendFrameAction", payload),
 } satisfies Window["electron"]); // satisfies tell TS what to expect, different to 'as'
 
 // Frontend functions cannot reside in utils.ts
@@ -49,4 +51,12 @@ function ipcOn<Key extends keyof EventPayloadMapping>(
     // Function itself returns another function
     // Returned function removes the listener just added
     return () => electron.ipcRenderer.off(key, cb);
+};
+
+// Frontend sends signal to backend for frame window actions
+function ipcSend<Key extends keyof EventPayloadMapping>(
+    key: Key,
+    payload: EventPayloadMapping[Key]
+) {
+    electron.ipcRenderer.send(key, payload);
 };

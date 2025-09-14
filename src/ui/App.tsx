@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { useStatistics } from './useStatistics'
 import { Chart } from './Chart';
 
+import "./App.css";
+
 function App() {
   const statistics = useStatistics(10);
   const [activeView, setActiveView] = useState<View>("CPU");
@@ -35,8 +37,16 @@ function App() {
 
   return (
     <>
-      <div style={{height: 120}}>
-        <Chart data={activeUsage} maxDataPoints={10}/>
+      <div className="App">
+        <header>
+          <button id="close" onClick={() => window.electron.sendFrameAction("CLOSE")} />
+          <button id="minimize" onClick={() => window.electron.sendFrameAction("MINIMIZE")} />
+          <button id="maximize" onClick={() => window.electron.sendFrameAction("MAXIMIZE")} />
+        </header>
+
+        <div style={{height: 120}}>
+          <Chart data={activeUsage} maxDataPoints={10}/>
+        </div>
       </div>
       statisticsstatisticsstatisticsstatisticsstatisticsstatisticsstatistics
     </>

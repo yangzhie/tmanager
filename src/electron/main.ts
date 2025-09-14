@@ -1,9 +1,9 @@
 import { app, BrowserWindow, ipcMain, Tray } from "electron";
 import path from "path";
 
-import { ipcMainHandle, isDev } from "./util.js";
+import { ipcMainHandle, ipcMainOn, isDev } from "./util.js";
 import { getStaticData, pollResources } from "./resourceManager.js";
-import { getAssetPath, getPreloadPath } from "./pathResolver.js";
+import { getPreloadPath } from "./pathResolver.js";
 import { createTray } from "./tray.js";
 import { createMenu } from "./menu.js";
 
@@ -14,7 +14,8 @@ app.on("ready", () => {
         title: "Test",
         webPreferences: {
             preload: getPreloadPath() // Run script before opening window
-        }
+        },
+        frame: false // Create custom frame
     });
 
     if (isDev()) {
@@ -36,6 +37,20 @@ app.on("ready", () => {
     // Renderer asks for data
     ipcMainHandle("getStaticData", () => {
         return getStaticData();
+    });
+
+    ipcMainOn("sendFrameAction", (payload) => {
+        switch(payload) {
+            case "CLOSE":
+                mainWindow.close();
+                break;
+            case "MAXIMIZE":
+                mainWindow.maximize();
+                break;
+            case "MINIMIZE":
+                mainWindow.minimize();
+                break;
+        }
     });
 
     createTray(mainWindow);
