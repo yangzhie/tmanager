@@ -16,7 +16,7 @@ type StaticData = {
     totalMemory: number,
 };
 
-type View = "CPU" | "RAM" | "STORAGE";
+type View = "CPU" | "RAM" | "STORAGE" | "UPTIME";
 
 type FrameAction = "CLOSE" | "MAXIMIZE" | "MINIMIZE";
 

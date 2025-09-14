@@ -1,32 +1,82 @@
 header {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    text-align: right;
-    padding: 0.5rem;
-    box-sizing: border-box;
-    background-color: #181818;
-    -webkit-app-region: drag; /* Enable dragging of app from header */
+  width: 100%;
+  text-align: right;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  background-color: #181818;
+  -webkit-app-region: drag;
 }
 
 header button {
-    all: unset;
-    border-radius: 50%;
-    width: 1rem;
-    height: 1rem;
-    margin: 0.25rem;
-    -webkit-app-region: no-drag; /* Disable dragging from buttons */
+  all: unset;
+  border-radius: 50%;
+  width: 1rem;
+  height: 1rem;
+  margin: 0.25rem;
+  -webkit-app-region: no-drag;
 }
 
 #close {
-    background-color: red;
+  background-color: red;
 }
 
 #minimize {
-    background-color: yellow;
+  background-color: yellow;
 }
 
 #maximize {
-    background-color: lime;
+  background-color: lime;
+}
+
+.main {
+  display: grid;
+  grid-template-columns: 16rem auto;
+  gap: 1rem;
+  align-items: center;
+  margin: 1rem;
+  max-width: 900px;
+  margin: auto;
+  margin-top: 4rem;
+}
+
+.main-grid {
+  height: 10rem;
+  padding: 0.5rem;
+}
+
+.select-option {
+  display: block;
+  padding: 0.5rem;
+  width: 100%;
+  background-color: #2c2c2c;
+  margin: 0.5rem 0;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.select-option:hover {
+  background-color: #333;
+}
+
+.select-option-title {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.select-option-title :first-child {
+  font-weight: 600;
+}
+
+.select-option-title :nth-child(2) {
+  font-weight: 400;
+  font-size: 0.8rem;
+}
+
+.select-option-chart {
+  height: 2rem;
+  width: 100%;
+}
+
+.select-option-chart * {
+  cursor: pointer;
 }
